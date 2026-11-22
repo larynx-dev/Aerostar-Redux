@@ -1,0 +1,25 @@
+{
+  "type": "create:mechanical_crafting",
+  "accept_mirrored": false,
+  "category": "misc",
+  "key": {
+    "T": { "tag": "c:ingots/titanium" },
+    "#": { "tag": "c:plates/titanium" },
+    "C": { "item": "northstar:circuit" },
+    "L": { "item": "northstar:polished_lunar_sapphire" },
+    "P": { "item": "create:precision_mechanism" },
+    "M": { "item": "northstar:targeting_computer" }
+  },
+  "pattern": [
+    "T#C#T",
+    "#LPL#",
+    "CPMPC",
+    "#LPL#",
+    "T#C#T"
+  ],
+  "result": {
+    "count": 1,
+    "id": "aerostar_redux:dimensional_drive"
+  },
+  "show_notification": true
+}

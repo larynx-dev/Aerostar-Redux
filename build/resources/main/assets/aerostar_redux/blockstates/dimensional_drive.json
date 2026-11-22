@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "facing=north": { "model": "aerostar_redux:block/dimensional_drive" },
+    "facing=south": { "model": "aerostar_redux:block/dimensional_drive", "y": 180 },
+    "facing=east":  { "model": "aerostar_redux:block/dimensional_drive", "y": 90 },
+    "facing=west":  { "model": "aerostar_redux:block/dimensional_drive", "y": 270 },
+    "facing=up":    { "model": "aerostar_redux:block/dimensional_drive", "x": 270 },
+    "facing=down":  { "model": "aerostar_redux:block/dimensional_drive", "x": 90 }
+  }
+}

@@ -4,57 +4,57 @@ license="MIT"
 issueTrackerURL="https://github.com/bega/aerostarcomp/issues"
 
 [[mixins]]
-config="aerostarcomp.mixins.json"
+config="aerostar_redux.mixins.json"
 
 [[mods]]
-modId="aerostarcomp"
-version="1.0.1"
-displayName="AeroStar"
+modId="aerostar_redux"
+version="1.2.0"
+displayName="AeroStar Redux"
 logoFile="aerostar_icon.png"
-authors="Gabriel (BEGA)"
-credits="Fork of 'Create: Northstar-Aeronautics Compatibility' by Vladi-YT-Dev (MIT). See LICENSE."
+authors="Larynx.Dev"
+credits="A compatibility layer for Create: Northstar Redux and Create: Aeronautics."
 description='''
 AeroStar Comp connects Create Aeronautics physics ships (Sable sub-levels) to the
 Northstar planet dimensions with a guided progression: build your ship, unlock each
 world, and travel the solar system with the Dimensional Drive.
 '''
 
-[[dependencies.aerostarcomp]]
+[[dependencies.aerostar_redux]]
     modId="neoforge"
     type="required"
     versionRange="[21.1.233,)"
     ordering="NONE"
     side="BOTH"
 
-[[dependencies.aerostarcomp]]
+[[dependencies.aerostar_redux]]
     modId="minecraft"
     type="required"
     versionRange="[1.21.1]"
     ordering="NONE"
     side="BOTH"
 
-[[dependencies.aerostarcomp]]
+[[dependencies.aerostar_redux]]
     modId="create"
     type="required"
     versionRange="[6.0.0,)"
     ordering="AFTER"
     side="BOTH"
 
-[[dependencies.aerostarcomp]]
+[[dependencies.aerostar_redux]]
     modId="sable"
     type="required"
     versionRange="[1.2.0,)"
     ordering="AFTER"
     side="BOTH"
 
-[[dependencies.aerostarcomp]]
+[[dependencies.aerostar_redux]]
     modId="northstar"
     type="required"
     versionRange="[0.5.0,)"
     ordering="AFTER"
     side="BOTH"
 
-[[dependencies.aerostarcomp]]
+[[dependencies.aerostar_redux]]
     modId="aeronautics_bundled"
     type="required"
     versionRange="[1.0.0,)"
@@ -62,7 +62,7 @@ world, and travel the solar system with the Dimensional Drive.
     side="BOTH"
 
 # Create Simulated provides the Physics Assembler our Orbital Physics Assembler extends + mixins into.
-[[dependencies.aerostarcomp]]
+[[dependencies.aerostar_redux]]
     modId="simulated"
     type="required"
     versionRange="[1.0.0,)"

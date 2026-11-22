@@ -170,6 +170,7 @@ dependencies {
 
     implementation "maven.modrinth:UZiq3QVW:2xMVbJcV" // Create: Northstar Redux 0.6.6
     implementation "maven.modrinth:LNytGWDc:UjX6dr61" // Create 6.0.10
+    implementation "maven.modrinth:8BmcQJ2H:Grwn5rUB" // Geckolib 4.9.3
     implementation "maven.modrinth:T9PomCSv:fg9dTRz9" // Sable 2.0.6
     implementation "dev.ryanhcode.sable-companion:sable-companion-common-1.21.1:1.6.0" // Sable Companion
 

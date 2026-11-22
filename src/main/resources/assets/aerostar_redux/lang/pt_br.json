@@ -1,0 +1,29 @@
+{
+  "itemGroup.aerostar_redux": "AeroStar",
+
+  "block.aerostar_redux.dimensional_drive": "Dimensional Drive",
+  "block.aerostar_redux.orbital_physics_assembler": "Montador Físico Orbital",
+
+  "gui.aerostar_redux.no_destination": "sem destino",
+  "gui.aerostar_redux.destination": "Destino: %s",
+  "gui.aerostar_redux.planet.earth_orbit": "Órbita da Terra",
+  "gui.aerostar_redux.planet.moon": "Lua",
+  "gui.aerostar_redux.planet.mars": "Marte",
+  "gui.aerostar_redux.planet.venus": "Vênus",
+  "gui.aerostar_redux.planet.mercury": "Mercúrio",
+  "gui.aerostar_redux.planet.earth": "Terra",
+
+  "gui.aerostar_redux.goggle.destination": "Destino",
+  "gui.aerostar_redux.goggle.speed": "Velocidade",
+  "gui.aerostar_redux.goggle.altitude": "Altitude",
+  "gui.aerostar_redux.goggle.required_altitude": "Altitude necessária",
+  "gui.aerostar_redux.goggle.no_ship": "Fora de uma nave",
+
+  "message.aerostar_redux.insert_star_map": "Insira um Star Map no slot.",
+  "message.aerostar_redux.unsupported": "Esse destino ainda não é suportado pelo drive.",
+  "message.aerostar_redux.unknown": "Destino desconhecido para esse Star Map.",
+  "message.aerostar_redux.not_on_ship": "O Dimensional Drive precisa estar numa nave física.",
+  "message.aerostar_redux.already_there": "Você já está nesse destino.",
+  "message.aerostar_redux.need_navigator": "Requer um Interplanetary Navigator na nave para ir a planetas.",
+  "message.aerostar_redux.armed": "Armado! Destino: %s. Suba acima de %s."
+}

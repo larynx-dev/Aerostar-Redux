@@ -1,0 +1,31 @@
+{
+  "itemGroup.aerostar_redux": "AeroStar",
+
+  "block.aerostar_redux.dimensional_drive": "Dimensional Drive",
+  "block.aerostar_redux.orbital_physics_assembler": "Orbital Physics Assembler",
+
+  "gui.aerostar_redux.no_destination": "no destination",
+  "gui.aerostar_redux.destination": "Destination: %s",
+  "gui.aerostar_redux.cycle_destination": "Click to change destination (%s/%s)",
+  "gui.aerostar_redux.planet.earth_orbit": "Earth Orbit",
+  "gui.aerostar_redux.planet.moon": "Moon",
+  "gui.aerostar_redux.planet.mars": "Mars",
+  "gui.aerostar_redux.planet.venus": "Venus",
+  "gui.aerostar_redux.planet.mercury": "Mercury",
+  "gui.aerostar_redux.planet.earth": "Earth",
+
+  "gui.aerostar_redux.goggle.destination": "Destination",
+  "gui.aerostar_redux.goggle.speed": "Speed",
+  "gui.aerostar_redux.goggle.altitude": "Altitude",
+  "gui.aerostar_redux.goggle.required_altitude": "Required altitude",
+  "gui.aerostar_redux.goggle.no_ship": "Not on a ship",
+
+  "message.aerostar_redux.insert_star_map": "Insert a Star Map into the slot.",
+  "message.aerostar_redux.unsupported": "That destination isn't supported by the drive yet.",
+  "message.aerostar_redux.no_research": "This Space Atlas has no researched destination the drive can reach. Gather enough science on a planet first.",
+  "message.aerostar_redux.unknown": "Unknown destination for this Star Map.",
+  "message.aerostar_redux.not_on_ship": "The Dimensional Drive must be on a physics ship.",
+  "message.aerostar_redux.already_there": "You're already at that destination.",
+  "message.aerostar_redux.need_navigator": "Requires an Interplanetary Navigator on the ship to reach planets.",
+  "message.aerostar_redux.armed": "Armed! Destination: %s. Climb above %s."
+}

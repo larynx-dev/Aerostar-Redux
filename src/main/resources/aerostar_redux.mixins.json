@@ -1,0 +1,15 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "larynx.dev.aerostar_redux.mixin",
+  "compatibilityLevel": "JAVA_21",
+  "mixins": [
+    "PhysicsAssemblerBlockEntityMixin"
+  ],
+  "client": [
+    "client.PhysicsAssemblerRendererMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}
