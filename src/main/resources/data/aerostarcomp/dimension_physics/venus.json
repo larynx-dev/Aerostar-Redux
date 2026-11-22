@@ -1,0 +1,8 @@
+{
+  "dimension": "northstar:venus",
+  "priority": 500,
+  "base_gravity": [0.0, -9.79, 0.0],
+  "base_pressure": 92.0,
+  "universal_drag": 0.45,
+  "magnetic_north": [0.0, 0.0, 0.0]
+}

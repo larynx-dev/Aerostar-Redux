@@ -1,0 +1,29 @@
+{
+  "itemGroup.aerostarcomp": "AeroStar",
+
+  "block.aerostarcomp.dimensional_drive": "Dimensional Drive",
+  "block.aerostarcomp.orbital_physics_assembler": "Orbital Physics Assembler",
+
+  "gui.aerostarcomp.no_destination": "no destination",
+  "gui.aerostarcomp.destination": "Destination: %s",
+  "gui.aerostarcomp.planet.earth_orbit": "Earth Orbit",
+  "gui.aerostarcomp.planet.moon": "Moon",
+  "gui.aerostarcomp.planet.mars": "Mars",
+  "gui.aerostarcomp.planet.venus": "Venus",
+  "gui.aerostarcomp.planet.mercury": "Mercury",
+  "gui.aerostarcomp.planet.earth": "Earth",
+
+  "gui.aerostarcomp.goggle.destination": "Destination",
+  "gui.aerostarcomp.goggle.speed": "Speed",
+  "gui.aerostarcomp.goggle.altitude": "Altitude",
+  "gui.aerostarcomp.goggle.required_altitude": "Required altitude",
+  "gui.aerostarcomp.goggle.no_ship": "Not on a ship",
+
+  "message.aerostarcomp.insert_star_map": "Insert a Star Map into the slot.",
+  "message.aerostarcomp.unsupported": "That destination isn't supported by the drive yet.",
+  "message.aerostarcomp.unknown": "Unknown destination for this Star Map.",
+  "message.aerostarcomp.not_on_ship": "The Dimensional Drive must be on a physics ship.",
+  "message.aerostarcomp.already_there": "You're already at that destination.",
+  "message.aerostarcomp.need_navigator": "Requires an Interplanetary Navigator on the ship to reach planets.",
+  "message.aerostarcomp.armed": "Armed! Destination: %s. Climb above %s."
+}

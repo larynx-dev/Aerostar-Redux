@@ -1,0 +1,16 @@
+{
+  "variants": {
+    "face=ceiling,facing=east": { "model": "aerostarcomp:block/orbital_physics_assembler/block", "x": 180, "y": 270 },
+    "face=ceiling,facing=north": { "model": "aerostarcomp:block/orbital_physics_assembler/block", "x": 180, "y": 180 },
+    "face=ceiling,facing=south": { "model": "aerostarcomp:block/orbital_physics_assembler/block", "x": 180 },
+    "face=ceiling,facing=west": { "model": "aerostarcomp:block/orbital_physics_assembler/block", "x": 180, "y": 90 },
+    "face=floor,facing=east": { "model": "aerostarcomp:block/orbital_physics_assembler/block", "y": 90 },
+    "face=floor,facing=north": { "model": "aerostarcomp:block/orbital_physics_assembler/block" },
+    "face=floor,facing=south": { "model": "aerostarcomp:block/orbital_physics_assembler/block", "y": 180 },
+    "face=floor,facing=west": { "model": "aerostarcomp:block/orbital_physics_assembler/block", "y": 270 },
+    "face=wall,facing=east": { "model": "aerostarcomp:block/orbital_physics_assembler/block", "x": 90, "y": 90 },
+    "face=wall,facing=north": { "model": "aerostarcomp:block/orbital_physics_assembler/block", "x": 90 },
+    "face=wall,facing=south": { "model": "aerostarcomp:block/orbital_physics_assembler/block", "x": 90, "y": 180 },
+    "face=wall,facing=west": { "model": "aerostarcomp:block/orbital_physics_assembler/block", "x": 90, "y": 270 }
+  }
+}

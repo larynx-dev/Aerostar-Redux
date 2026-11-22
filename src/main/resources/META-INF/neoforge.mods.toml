@@ -1,0 +1,70 @@
+modLoader="javafml"
+loaderVersion="[1,)"
+license="MIT"
+issueTrackerURL="https://github.com/bega/aerostarcomp/issues"
+
+[[mixins]]
+config="aerostarcomp.mixins.json"
+
+[[mods]]
+modId="aerostarcomp"
+version="1.0.1"
+displayName="AeroStar"
+logoFile="aerostar_icon.png"
+authors="Gabriel (BEGA)"
+credits="Fork of 'Create: Northstar-Aeronautics Compatibility' by Vladi-YT-Dev (MIT). See LICENSE."
+description='''
+AeroStar Comp connects Create Aeronautics physics ships (Sable sub-levels) to the
+Northstar planet dimensions with a guided progression: build your ship, unlock each
+world, and travel the solar system with the Dimensional Drive.
+'''
+
+[[dependencies.aerostarcomp]]
+    modId="neoforge"
+    type="required"
+    versionRange="[21.1.233,)"
+    ordering="NONE"
+    side="BOTH"
+
+[[dependencies.aerostarcomp]]
+    modId="minecraft"
+    type="required"
+    versionRange="[1.21.1]"
+    ordering="NONE"
+    side="BOTH"
+
+[[dependencies.aerostarcomp]]
+    modId="create"
+    type="required"
+    versionRange="[6.0.0,)"
+    ordering="AFTER"
+    side="BOTH"
+
+[[dependencies.aerostarcomp]]
+    modId="sable"
+    type="required"
+    versionRange="[1.2.0,)"
+    ordering="AFTER"
+    side="BOTH"
+
+[[dependencies.aerostarcomp]]
+    modId="northstar"
+    type="required"
+    versionRange="[0.5.0,)"
+    ordering="AFTER"
+    side="BOTH"
+
+[[dependencies.aerostarcomp]]
+    modId="aeronautics_bundled"
+    type="required"
+    versionRange="[1.0.0,)"
+    ordering="AFTER"
+    side="BOTH"
+
+# Create Simulated provides the Physics Assembler our Orbital Physics Assembler extends + mixins into.
+[[dependencies.aerostarcomp]]
+    modId="simulated"
+    type="required"
+    versionRange="[1.0.0,)"
+    ordering="AFTER"
+    side="BOTH"
