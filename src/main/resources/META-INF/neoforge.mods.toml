@@ -1,7 +1,7 @@
 modLoader="javafml"
 loaderVersion="[1,)"
 license="MIT"
-issueTrackerURL="https://github.com/bega/aerostarcomp/issues"
+issueTrackerURL="https://github.com/larynx-dev/Aerostar-Redux/issues"
 
 [[mixins]]
 config="aerostar_redux.mixins.json"
