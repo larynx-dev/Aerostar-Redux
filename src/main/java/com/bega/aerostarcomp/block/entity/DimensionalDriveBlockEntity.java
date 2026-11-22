@@ -5,19 +5,24 @@ import com.bega.aerostarcomp.command.DriveTransferCommand;
 import com.bega.aerostarcomp.menu.DimensionalDriveMenu;
 import com.bega.aerostarcomp.network.DriveFeedbackPacket;
 import com.bega.aerostarcomp.transfer.SubLevelDimensionTransfer;
+import com.lightning.northstar.accessor.NorthstarLevel;
+import com.lightning.northstar.content.NorthstarDataComponents;
+import com.lightning.northstar.item.atlas.SpaceAtlasContent;
+import com.lightning.northstar.planet.Planet;
+import com.lightning.northstar.planet.PlanetTracker;
+import com.lightning.northstar.planet.data.PlanetDimension;
 import com.simibubi.create.api.equipment.goggles.IHaveGoggleInformation;
-import dev.ryanhcode.sable.api.sublevel.ServerSubLevelContainer;
-import dev.ryanhcode.sable.api.sublevel.SubLevelContainer;
-import dev.ryanhcode.sable.companion.math.BoundingBox3dc;
+import dev.ryanhcode.sable.Sable;
 import dev.ryanhcode.sable.sublevel.ServerSubLevel;
-import dev.ryanhcode.sable.sublevel.SubLevel;
 import dev.ryanhcode.sable.sublevel.plot.PlotChunkHolder;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
+import java.util.Set;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup.Provider;
-import net.minecraft.core.component.DataComponentType;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
@@ -67,7 +72,10 @@ public class DimensionalDriveBlockEntity extends BlockEntity implements IHaveGog
     private double teleSpeed = 0.0;
     private double teleAltitude = 0.0;
     private boolean teleHasShip = false;
-    private static final ResourceLocation PLANET_COMPONENT_ID = ResourceLocation.fromNamespaceAndPath("northstar", "planet");
+    /** Destination the player picked in the GUI; null = first reachable one. */
+    private String selectedDestination = null;
+    /** Every destination the drive can fly to, in GUI cycling order. */
+    public static final List<String> DESTINATION_ORDER = List.of("earth_orbit", "earth", "moon", "mars", "venus", "mercury");
 
     public DimensionalDriveBlockEntity(BlockPos pos, BlockState state) {
         super(AeroStarCompBlockEntityTypes.DIMENSIONAL_DRIVE.get(), pos, state);
@@ -84,44 +92,115 @@ public class DimensionalDriveBlockEntity extends BlockEntity implements IHaveGog
     public static boolean isStarMap(ItemStack stack) {
         if (stack != null && !stack.isEmpty()) {
             ResourceLocation id = BuiltInRegistries.ITEM.getKey(stack.getItem());
-            return id != null && id.getNamespace().equals("northstar") && id.getPath().startsWith("star_map");
+            return id != null && id.getNamespace().equals("northstar") && id.getPath().startsWith("space_atlas");
         } else {
             return false;
         }
     }
 
-    public static String planetFromStarMap(ItemStack stack) {
-        if (!isStarMap(stack)) {
-            return null;
-        } else {
-            DataComponentType<?> type = BuiltInRegistries.DATA_COMPONENT_TYPE.get(PLANET_COMPONENT_ID);
-            if (type == null) {
-                return null;
-            } else {
-                Object value = stack.get(type);
-                if (!(value instanceof String)) {
-                    return null;
-                } else {
-                    String p = ((String)value).toLowerCase(Locale.ROOT);
-                    if (p.contains("moon")) {
-                        return "moon";
-                    } else if (p.contains("mars")) {
-                        return "mars";
-                    } else if (p.contains("venus")) {
-                        return "venus";
-                    } else if (p.contains("mercury")) {
-                        return "mercury";
-                    } else {
-                        return p.contains("earth") ? "earth" : null;
-                    }
+    /**
+     * Destinations unlocked by a Northstar Space Atlas, in {@link #DESTINATION_ORDER}.
+     * <p>
+     * Since Northstar 0.6, an atlas no longer stores a single "planet" string: it carries a
+     * {@link SpaceAtlasContent} with the science gathered per planet. Like Northstar's own Rocket
+     * Station, a planet counts as unlocked once its science reaches the planet's required science;
+     * all of that planet's dimensions the drive supports (surface and orbit) become destinations.
+     */
+    public static List<String> unlockedDestinations(ItemStack stack, Level level) {
+        if (!isStarMap(stack) || !(level instanceof NorthstarLevel northstarLevel)) {
+            return List.of();
+        }
+
+        SpaceAtlasContent content = stack.get(NorthstarDataComponents.SPACE_ATLAS_CONTENT);
+        PlanetTracker tracker = northstarLevel.northstar$getPlanetTracker();
+        if (content == null || tracker == null) {
+            return List.of();
+        }
+
+        Set<String> unlocked = new HashSet<>();
+        for (Map.Entry<ResourceLocation, SpaceAtlasContent.Planet> entry : content.planets().entrySet()) {
+            Planet planet = tracker.getPlanetById(entry.getKey());
+            if (planet == null) {
+                continue;
+            }
+
+            float required = planet.properties.requiredScience();
+            if (required < 0.0F || entry.getValue().science() < required) {
+                continue;
+            }
+
+            for (PlanetDimension dimension : planet.dimensions) {
+                String destination = destinationForDimension(dimension.dimensionId());
+                if (destination != null) {
+                    unlocked.add(destination);
                 }
             }
         }
+
+        return DESTINATION_ORDER.stream().filter(unlocked::contains).toList();
+    }
+
+    private static String destinationForDimension(ResourceKey<Level> dimension) {
+        for (String destination : DESTINATION_ORDER) {
+            if (dimension.equals(DriveTransferCommand.resolveDimension(destination))) {
+                return destination;
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * Picks the active destination: the player's selection if it's still unlocked, otherwise the
+     * first unlocked destination that isn't the dimension the drive is already in.
+     */
+    public static String pickDestination(List<String> unlocked, String selected, Level level) {
+        if (unlocked.isEmpty()) {
+            return null;
+        }
+
+        if (selected != null && unlocked.contains(selected)) {
+            return selected;
+        }
+
+        if (level != null) {
+            for (String destination : unlocked) {
+                if (!level.dimension().equals(DriveTransferCommand.resolveDimension(destination))) {
+                    return destination;
+                }
+            }
+        }
+
+        return unlocked.get(0);
+    }
+
+    public String getSelectedDestination() {
+        return this.selectedDestination;
     }
 
     public String resolveDestination() {
         ItemStack map = this.starMap.getStackInSlot(0);
-        return !map.isEmpty() && isStarMap(map) ? planetFromStarMap(map) : "earth_orbit";
+        if (map.isEmpty()) {
+            return "earth_orbit";
+        }
+
+        return pickDestination(unlockedDestinations(map, this.level), this.selectedDestination, this.level);
+    }
+
+    /** Advances to the next destination unlocked by the inserted atlas. Disarms the drive. */
+    public void cycleDestination() {
+        List<String> unlocked = unlockedDestinations(this.starMap.getStackInSlot(0), this.level);
+        if (unlocked.size() < 2) {
+            return;
+        }
+
+        String current = pickDestination(unlocked, this.selectedDestination, this.level);
+        this.selectedDestination = unlocked.get((unlocked.indexOf(current) + 1) % unlocked.size());
+        this.armed = false;
+        this.setChanged();
+        if (this.level != null) {
+            this.level.sendBlockUpdated(this.worldPosition, this.getBlockState(), this.getBlockState(), 3);
+        }
     }
 
     public static Component planetName(String planet) {
@@ -172,7 +251,7 @@ public class DimensionalDriveBlockEntity extends BlockEntity implements IHaveGog
     public void tryArm(ServerPlayer player) {
         String planet = this.resolveDestination();
         if (planet == null) {
-            err(player, "message.aerostarcomp.unsupported");
+            err(player, "message.aerostarcomp.no_research");
         } else {
             ResourceKey<Level> targetDimKey = DriveTransferCommand.resolveDimension(planet);
             if (targetDimKey == null) {
@@ -231,35 +310,19 @@ public class DimensionalDriveBlockEntity extends BlockEntity implements IHaveGog
         }
     }
 
+    /**
+     * The ship (Sable sub-level) whose plot contains this block.
+     * <p>
+     * Sable stores every ship's blocks in a plot inside the parent level, so all ships in a
+     * dimension share the same {@code Level}. Matching on the level alone (as this used to) returned
+     * whichever ship happened to be first, so the navigator scan often inspected the wrong ship.
+     */
     private static ServerSubLevel findSubLevel(Level level, BlockPos pos) {
-        if (level != null && level.getServer() != null) {
-            for (ServerLevel sl : level.getServer().getAllLevels()) {
-                ServerSubLevelContainer container = SubLevelContainer.getContainer(sl);
-                if (container != null) {
-                    for (SubLevel candidate : container.getAllSubLevels()) {
-                        if (candidate instanceof ServerSubLevel ssl) {
-                            if (ssl.getLevel() == level) {
-                                return ssl;
-                            }
-
-                            if (level instanceof ServerLevel) {
-                                BoundingBox3dc bb = ssl.boundingBox();
-                                double bx = (double)pos.getX();
-                                double by = (double)pos.getY();
-                                double bz = (double)pos.getZ();
-                                if (bx >= bb.minX() && bx <= bb.maxX() && by >= bb.minY() && by <= bb.maxY() && bz >= bb.minZ() && bz <= bb.maxZ()) {
-                                    return ssl;
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-
-            return null;
-        } else {
+        if (level == null || level.isClientSide()) {
             return null;
         }
+
+        return Sable.HELPER.getContaining(level, pos) instanceof ServerSubLevel ssl ? ssl : null;
     }
 
     private void updateTelemetry(Level level, BlockPos pos, BlockState state) {
@@ -340,6 +403,9 @@ public class DimensionalDriveBlockEntity extends BlockEntity implements IHaveGog
         super.saveAdditional(tag, registries);
         tag.putBoolean("armed", this.armed);
         tag.put("starMap", this.starMap.serializeNBT(registries));
+        if (this.selectedDestination != null) {
+            tag.putString("selectedDestination", this.selectedDestination);
+        }
     }
 
     @Override
@@ -349,6 +415,8 @@ public class DimensionalDriveBlockEntity extends BlockEntity implements IHaveGog
         if (tag.contains("starMap")) {
             this.starMap.deserializeNBT(registries, tag.getCompound("starMap"));
         }
+
+        this.selectedDestination = tag.contains("selectedDestination") ? tag.getString("selectedDestination") : null;
 
         if (tag.contains("teleSpeed")) {
             this.teleSpeed = tag.getDouble("teleSpeed");

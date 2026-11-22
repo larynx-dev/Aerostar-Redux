@@ -6,6 +6,7 @@
 
   "gui.aerostarcomp.no_destination": "no destination",
   "gui.aerostarcomp.destination": "Destination: %s",
+  "gui.aerostarcomp.cycle_destination": "Click to change destination (%s/%s)",
   "gui.aerostarcomp.planet.earth_orbit": "Earth Orbit",
   "gui.aerostarcomp.planet.moon": "Moon",
   "gui.aerostarcomp.planet.mars": "Mars",
@@ -21,6 +22,7 @@
 
   "message.aerostarcomp.insert_star_map": "Insert a Star Map into the slot.",
   "message.aerostarcomp.unsupported": "That destination isn't supported by the drive yet.",
+  "message.aerostarcomp.no_research": "This Space Atlas has no researched destination the drive can reach. Gather enough science on a planet first.",
   "message.aerostarcomp.unknown": "Unknown destination for this Star Map.",
   "message.aerostarcomp.not_on_ship": "The Dimensional Drive must be on a physics ship.",
   "message.aerostarcomp.already_there": "You're already at that destination.",

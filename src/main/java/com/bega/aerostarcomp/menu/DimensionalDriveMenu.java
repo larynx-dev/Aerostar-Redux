@@ -28,8 +28,10 @@ public class DimensionalDriveMenu extends AbstractContainerMenu {
 
     public DimensionalDriveMenu(int containerId, Inventory inventory, FriendlyByteBuf buf) {
         super(AeroStarCompMenuTypes.DIMENSIONAL_DRIVE.get(), containerId);
-        this.blockEntity = null;
-        BlockPos ignored = buf.readBlockPos();
+        BlockPos pos = buf.readBlockPos();
+        // Client side: keep a handle on the synced block entity so the screen can show the
+        // selected destination. Slot contents still come through a dummy handler + menu sync.
+        this.blockEntity = inventory.player.level().getBlockEntity(pos) instanceof DimensionalDriveBlockEntity be ? be : null;
         this.addSlots(inventory, new ItemStackHandler(1));
     }
 

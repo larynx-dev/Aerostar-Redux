@@ -17,19 +17,30 @@ public record DriveSettingsPacket(int action) implements CustomPacketPayload {
         (buf, pkt) -> buf.writeInt(pkt.action), buf -> new DriveSettingsPacket(buf.readInt())
     );
 
+    public static final int ACTION_ARM = 1;
+    public static final int ACTION_CYCLE_DESTINATION = 2;
+
     public static DriveSettingsPacket arm() {
-        return new DriveSettingsPacket(1);
+        return new DriveSettingsPacket(ACTION_ARM);
+    }
+
+    public static DriveSettingsPacket cycleDestination() {
+        return new DriveSettingsPacket(ACTION_CYCLE_DESTINATION);
     }
 
     public static void handle(DriveSettingsPacket pkt, IPayloadContext ctx) {
         ctx.enqueueWork(() -> {
             if (ctx.player() instanceof ServerPlayer player) {
                 if (!(player.containerMenu instanceof DimensionalDriveMenu menu)) {
-                    AeroStarComp.LOGGER.warn("Arm packet received but player has no drive menu open.");
+                    AeroStarComp.LOGGER.warn("Drive settings packet received but player has no drive menu open.");
                 } else {
                     DimensionalDriveBlockEntity be = menu.getBlockEntity();
                     if (be != null) {
-                        be.tryArm(player);
+                        switch (pkt.action) {
+                            case ACTION_ARM -> be.tryArm(player);
+                            case ACTION_CYCLE_DESTINATION -> be.cycleDestination();
+                            default -> AeroStarComp.LOGGER.warn("Unknown drive settings action {}", pkt.action);
+                        }
                     }
                 }
             }

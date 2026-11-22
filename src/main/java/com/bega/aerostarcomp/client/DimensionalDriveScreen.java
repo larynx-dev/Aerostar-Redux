@@ -59,6 +59,33 @@ public class DimensionalDriveScreen extends AbstractContainerScreen<DimensionalD
         }
     }
 
+    private static final int DEST_X = 46;
+    private static final int DEST_Y = 43;
+    private static final int DEST_W = 110;
+    private static final int DEST_H = 12;
+
+    private boolean isOverDestination(double mouseX, double mouseY) {
+        int x = this.leftPos + DEST_X;
+        int y = this.topPos + DEST_Y;
+        return mouseX >= (double)x && mouseX < (double)(x + DEST_W) && mouseY >= (double)y && mouseY < (double)(y + DEST_H);
+    }
+
+    private List<String> unlockedDestinations() {
+        return DimensionalDriveBlockEntity.unlockedDestinations(this.getMenu().getStarMapStack(), this.minecraft != null ? this.minecraft.level : null);
+    }
+
+    /** Mirrors {@link DimensionalDriveBlockEntity#resolveDestination()} using the menu's live slot. */
+    private String currentDestination(List<String> unlocked) {
+        if (this.getMenu().getStarMapStack().isEmpty()) {
+            return "earth_orbit";
+        }
+
+        DimensionalDriveBlockEntity be = this.getMenu().getBlockEntity();
+        return DimensionalDriveBlockEntity.pickDestination(
+            unlocked, be != null ? be.getSelectedDestination() : null, this.minecraft != null ? this.minecraft.level : null
+        );
+    }
+
     private boolean isOverArm(double mouseX, double mouseY) {
         int x = this.leftPos + 160;
         int y = this.topPos + 76;
@@ -69,6 +96,13 @@ public class DimensionalDriveScreen extends AbstractContainerScreen<DimensionalD
     public boolean mouseClicked(double mouseX, double mouseY, int button) {
         if (button == 0 && this.isOverArm(mouseX, mouseY)) {
             PacketDistributor.sendToServer(DriveSettingsPacket.arm());
+            if (this.minecraft != null && this.minecraft.player != null) {
+                this.minecraft.player.playSound(SoundEvents.UI_BUTTON_CLICK.value(), 1.0F, 1.0F);
+            }
+
+            return true;
+        } else if (button == 0 && this.isOverDestination(mouseX, mouseY) && this.unlockedDestinations().size() > 1) {
+            PacketDistributor.sendToServer(DriveSettingsPacket.cycleDestination());
             if (this.minecraft != null && this.minecraft.player != null) {
                 this.minecraft.player.playSound(SoundEvents.UI_BUTTON_CLICK.value(), 1.0F, 1.0F);
             }
@@ -85,12 +119,21 @@ public class DimensionalDriveScreen extends AbstractContainerScreen<DimensionalD
         super.render(g, mx, my, pt);
         int x = this.leftPos;
         int y = this.topPos;
-        ItemStack starMap = this.getMenu().getStarMapStack();
-        String planet = DimensionalDriveBlockEntity.planetFromStarMap(starMap);
+        List<String> unlocked = this.unlockedDestinations();
+        String planet = this.currentDestination(unlocked);
         Component label = planet == null
             ? Component.translatable("gui.aerostarcomp.no_destination").withStyle(ChatFormatting.GRAY)
             : Component.translatable("gui.aerostarcomp.destination", DimensionalDriveBlockEntity.planetName(planet)).withStyle(ChatFormatting.GREEN);
         g.drawString(this.font, label, x + 46, y + 45, 16777215, true);
+        boolean canCycle = unlocked.size() > 1;
+        if (canCycle && this.isOverDestination((double)mx, (double)my)) {
+            g.renderTooltip(
+                this.font,
+                Component.translatable("gui.aerostarcomp.cycle_destination", unlocked.indexOf(planet) + 1, unlocked.size()),
+                mx,
+                my
+            );
+        }
         if (feedback != null && System.currentTimeMillis() < feedbackUntil) {
             List<FormattedCharSequence> lines = this.font.split(feedback, 144);
             int needed = lines.size() * 10;
